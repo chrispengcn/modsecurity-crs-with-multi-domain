@@ -2,12 +2,19 @@
 
 下面我会提供仅包含 Dockerfile 和配置生成脚本的极简版本，移除所有 WordPress 相关的示例和默认值，确保镜像通用、轻量化。
 
+下载打包好的项目， 运行命名构建Docker 镜像
+
+docker build -t modsecurity-custom:latest .
+
 ### 一、精简后的核心文件
 
 #### 1. Dockerfile（通用版）
 ```dockerfile
 # 基于官方的owasp/modsecurity-crs nginx版本
 FROM owasp/modsecurity-crs:nginx
+
+# 切换到root用户执行系统级操作（核心修复）
+USER root
 
 # 仅安装必要的基础工具，最小化镜像
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -21,6 +28,9 @@ RUN chmod +x /usr/local/bin/generate_vhost.sh
 
 # 清空默认的default.conf，避免冲突（核心）
 RUN rm -f /etc/nginx/conf.d/default.conf
+
+# 可选：切回非root用户（保持镜像安全最佳实践）
+USER nginx
 
 # 启动逻辑：先生成配置，再启动nginx
 ENTRYPOINT ["/usr/local/bin/generate_vhost.sh"]
