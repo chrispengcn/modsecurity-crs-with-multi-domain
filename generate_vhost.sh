@@ -65,12 +65,12 @@ server {
     }
 
     # 通用静态资源缓存
-    location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|svg)$ {
-        proxy_pass ${current_proxy};
-        proxy_set_header Host \$host;
-        expires 30d;
-        add_header Cache-Control "public, max-age=2592000";
-    }
+    # location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|svg)$ {
+    #    proxy_pass ${current_proxy};
+    #    proxy_set_header Host \$host;
+    #    expires 30d;
+    #    add_header Cache-Control "public, max-age=2592000";
+    # }
 
     client_max_body_size 64M;
 }
